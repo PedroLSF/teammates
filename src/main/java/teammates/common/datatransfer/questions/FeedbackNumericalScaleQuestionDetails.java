@@ -32,6 +32,22 @@ public class FeedbackNumericalScaleQuestionDetails extends FeedbackQuestionDetai
         this.step = 0.5;
     }
 
+    public List<String> validateErrors(int answer){
+        List<String> errors = new ArrayList<>();
+        if(minScale >= maxScale){
+            errors.add(NUMSCALE_ERROR_MIN_MAX);
+        }
+        if (step <= 0) {
+            errors.add(NUMSCALE_ERROR_STEP);
+        }
+
+        boolean isAnswerOutOfRange = answer < minScale || answer > maxScale;
+        if (isAnswerOutOfRange) {
+            errors.add("Your Answer is out of the range for " + "Numerical-scale question" + ".");
+        }
+        return errors;
+    }
+
     @Override
     public boolean shouldChangesRequireResponseDeletion(
             FeedbackQuestionDetails newDetails) {
@@ -43,17 +59,6 @@ public class FeedbackNumericalScaleQuestionDetails extends FeedbackQuestionDetai
                || this.step != newNumScaleDetails.step;
     }
 
-    @Override
-    public List<String> validateQuestionDetails() {
-        List<String> errors = new ArrayList<>();
-        if (minScale >= maxScale) {
-            errors.add(NUMSCALE_ERROR_MIN_MAX);
-        }
-        if (step <= 0) {
-            errors.add(NUMSCALE_ERROR_STEP);
-        }
-        return errors;
-    }
 
     @Override
     public List<String> validateResponsesDetails(List<FeedbackResponseDetails> responses, int numRecipients) {
