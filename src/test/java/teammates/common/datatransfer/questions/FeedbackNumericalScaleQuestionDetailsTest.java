@@ -114,13 +114,39 @@ public class FeedbackNumericalScaleQuestionDetailsTest extends BaseTestCase {
     }
 
     @Test
-    public void tesValidateQuestionDetails() {
+    public void testValidateQuestionDetails_minShouldBeLessThanMax() {
         FeedbackNumericalScaleQuestionDetails numScaleQuestion = new FeedbackNumericalScaleQuestionDetails();
-        List <String> errors = numScaleQuestion.validateErrors();
+        List <String> errors = numScaleQuestion.validateErrors(0);
         ______TS("Test Min must be less than Max");
         numScaleQuestion.setMaxScale(1);
         numScaleQuestion.setMinScale(2);
-        errors = numScaleQuestion.validateErrors();
+        errors = numScaleQuestion.validateErrors(0);
         assertEquals("Minimum value must be < maximum value for " + "Numerical-scale question" + ".", errors.get(0));
+    }
+
+     @Test
+    public void testValidateQuestionDetails_shouldBeGreaterThanZero() {
+        FeedbackNumericalScaleQuestionDetails numScaleQuestion = new FeedbackNumericalScaleQuestionDetails();
+        List <String> errors = numScaleQuestion.validateErrors(0);
+        ______TS("Numerical Scale must be greather than 0");
+        numScaleQuestion.setStep(0);
+        numScaleQuestion.setMaxScale(0);
+        numScaleQuestion.setMinScale(-1);
+        errors = numScaleQuestion.validateErrors(0);
+        assertEquals("Step value must be > 0 for " + "Numerical-scale question" + ".", errors.get(0));
+    }
+
+    @Test
+    public void testValidateQuestionDetails_outOfTheRange() {
+        FeedbackNumericalScaleQuestionDetails numScaleQuestion = new FeedbackNumericalScaleQuestionDetails();
+        
+        //when(mockArrayList.get(0)).thenReturn(0);
+        //List<FeedbackResponseDetails> result = mockArrayList.get("0");
+        List <String> errors = numScaleQuestion.validateErrors(0);
+        ______TS("Numerical Scale must be in the range");
+        numScaleQuestion.setMaxScale(5);
+        numScaleQuestion.setMinScale(1);
+        errors = numScaleQuestion.validateErrors(0);
+        assertEquals("Your Answer is out of the range for " + "Numerical-scale question" + ".", errors.get(0));
     }
 }
