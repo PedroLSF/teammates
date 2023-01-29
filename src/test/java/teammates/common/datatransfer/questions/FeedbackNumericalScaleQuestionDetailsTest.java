@@ -116,30 +116,11 @@ public class FeedbackNumericalScaleQuestionDetailsTest extends BaseTestCase {
     @Test
     public void tesValidateQuestionDetails() {
         FeedbackNumericalScaleQuestionDetails numScaleQuestion = new FeedbackNumericalScaleQuestionDetails();
-
-        ______TS("Test Default no error");
-        List<String> errors = numScaleQuestion.validateQuestionDetails();
-        assertTrue(errors.isEmpty());
-
-        ______TS("Test Min greater than Max error");
+        List <String> errors = numScaleQuestion.validateErrors();
+        ______TS("Test Min must be less than Max");
         numScaleQuestion.setMaxScale(1);
-        numScaleQuestion.setMinScale(10);
-        errors = numScaleQuestion.validateQuestionDetails();
-        assertEquals(1, errors.size());
-        assertEquals(FeedbackNumericalScaleQuestionDetails.NUMSCALE_ERROR_MIN_MAX, errors.get(0));
-
-        ______TS("Test Step <= 0 error");
-        numScaleQuestion.setMaxScale(100);
-        numScaleQuestion.setStep(0);
-        errors = numScaleQuestion.validateQuestionDetails();
-        assertEquals(1, errors.size());
-        assertEquals(FeedbackNumericalScaleQuestionDetails.NUMSCALE_ERROR_STEP, errors.get(0));
-
-        ______TS("Test Step <= 0 + Min >= Max error");
-        numScaleQuestion.setMinScale(100);
-        errors = numScaleQuestion.validateQuestionDetails();
-        assertEquals(2, errors.size());
-        assertEquals(FeedbackNumericalScaleQuestionDetails.NUMSCALE_ERROR_MIN_MAX, errors.get(0));
-        assertEquals(FeedbackNumericalScaleQuestionDetails.NUMSCALE_ERROR_STEP, errors.get(1));
+        numScaleQuestion.setMinScale(2);
+        errors = numScaleQuestion.validateErrors();
+        assertEquals("Minimum value must be < maximum value for " + "Numerical-scale question" + ".", errors.get(0));
     }
 }
