@@ -23,6 +23,28 @@ public class FeedbackRubricQuestionDetailsTest extends BaseTestCase {
         assertTrue(rubricDetails.getRubricWeights().isEmpty());
     }
 
+     @Test
+    public void testIsValidDescriptionSize_validDescriptionSize_returnTrue(){
+        FeedbackRubricQuestionDetails rubricDetails = new FeedbackRubricQuestionDetails();
+        rubricDetails.setRubricDescriptions(Arrays.asList(Arrays.asList("Test1", "Test2"), Arrays.asList("Test1", "Test2")));
+        rubricDetails.setRubricSubQuestions(Arrays.asList("Sbqn1", "Sbqn2"));
+        rubricDetails.setRubricChoices(Arrays.asList("Choice-1", "Choice-2"));
+        assertEquals(rubricDetails.getRubricDescriptions().size(), rubricDetails.getRubricSubQuestions().size());   
+    }
+
+     @Test
+    public void testValidateQuestionDetails_invalidDescriptionSize_returnFalse() {
+        FeedbackRubricQuestionDetails rubricDetails = new FeedbackRubricQuestionDetails();
+        rubricDetails.setRubricDescriptions(Arrays.asList(Arrays.asList("A", "B")));
+        rubricDetails.setHasAssignedWeights(false);
+        rubricDetails.setRubricSubQuestions(Arrays.asList("SubQn-1", "SubQn-2"));
+        rubricDetails.setRubricChoices(Arrays.asList("Choice-1", "Choice-2", "Choice-3"));
+        rubricDetails.setRubricWeightsForEachCell(Arrays.asList(Arrays.asList(3.0, 3.0)));
+
+        List<String> errors = rubricDetails.validateQuestionDetails();
+        assertEquals(FeedbackRubricQuestionDetails.RUBRIC_ERROR_DESC_INVALID_SIZE, errors.get(0));
+    }
+
     @Test
     public void testValidateQuestionDetails_invalidWeightListSize_errorReturned() {
         FeedbackRubricQuestionDetails rubricDetails = new FeedbackRubricQuestionDetails();

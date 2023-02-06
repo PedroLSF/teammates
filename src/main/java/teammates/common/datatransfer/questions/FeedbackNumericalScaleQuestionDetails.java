@@ -59,6 +59,17 @@ public class FeedbackNumericalScaleQuestionDetails extends FeedbackQuestionDetai
                || this.step != newNumScaleDetails.step;
     }
 
+@Override
+    public List<String> validateQuestionDetails() {
+        List<String> errors = new ArrayList<>();
+        if (minScale >= maxScale) {
+            errors.add(NUMSCALE_ERROR_MIN_MAX);
+        }
+        if (step <= 0) {
+            errors.add(NUMSCALE_ERROR_STEP);
+        }
+        return errors;
+    }
 
     @Override
     public List<String> validateResponsesDetails(List<FeedbackResponseDetails> responses, int numRecipients) {
